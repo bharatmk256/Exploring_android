@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,19 +14,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.challange);
     }
 
     public void buttonIsClicked(View buttonView){
 
-        TextView textView = findViewById(R.id.text_1);
+//        TextView textView = findViewById(R.id.text_1);
 //        Log.i("TAG", textView.getText().toString());
 
-//        EditText editText = findViewById(R.id.edt_name);
-//        Log.i("TTT",editText.getText().toString());
+//        EditText name = findViewById(R.id.edt_name);
+//        Log.i("TTT",name.getText().toString());
 
-//        EditText editNum = findViewById(R.id.edt_number);
-//        Log.i("NNN",editNum.getText().toString());
+//        EditText phoneNo = findViewById(R.id.edt_number);
+//        Log.i("NNN",phoneNo.getText().toString());
 
 
         /*
@@ -36,7 +37,12 @@ public class MainActivity extends AppCompatActivity {
         * add some string to show toast
         * define length
         * .show method to show toast*/
-        Toast.makeText(MainActivity.this,textView.getText().toString(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this,
+//                "Your name is: " + name.getText().toString() +"\n Your phone no is: " + phoneNo.getText().toString(),
+//                Toast.LENGTH_SHORT).show();
+
+        ImageView imageView = (ImageView)findViewById(R.id.image_first);
+        imageView.setImageResource(R.drawable.wall);
 
     }
 

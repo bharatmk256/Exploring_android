@@ -25,22 +25,33 @@
         android:layout_marginRight="50dp"
         android:layout_marginTop="178dp"
         android:hint="enter your name"/>
+
     <EditText
         android:id="@+id/edt_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
+        android:layout_marginTop="230dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="250dp"
         android:hint="enter your number"
-        android:inputType="number"/>
+        android:inputType="number" />
+
+    <ImageView
+        android:id="@+id/image_first"
+        android:layout_width="260dp"
+        android:layout_height="160dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="56dp"
+        android:src="@drawable/dododo"
+        android:scaleType="fitCenter"/>
 
     <Button
         android:id="@+id/button_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp"
+        android:layout_alignParentBottom="true"
         android:text="Click me"
         android:textColor="#ffffff"
         android:textSize="20sp"
