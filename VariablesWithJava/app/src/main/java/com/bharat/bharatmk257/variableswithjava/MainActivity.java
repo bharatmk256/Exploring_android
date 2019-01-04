@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView textView;
+    // textView is instance variable and it's mostly set to private also it's declared in class
+    //because of it's declared in class it can be accessed in anywhere in class
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,15 +37,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void Bharat(View view) {
-        EditText edit1 = (EditText)findViewById(R.id.editText1);
 
+        EditText edit1 = (EditText)findViewById(R.id.editText1);
         EditText edit2 = (EditText)findViewById(R.id.editText2);
 
-        int a = Integer.parseInt(edit1.getText().toString()) *
-                Integer.parseInt(edit2.getText().toString());
+//        int multiplay = Integer.parseInt(edit1.getText().toString()) *
+//                        Integer.parseInt(edit2.getText().toString());
 
-        TextView textView = (TextView)findViewById(R.id.text1);
-        textView.setText(a+"");
+        float reminder = Float.parseFloat(edit1.getText().toString()) %
+                Float.parseFloat(edit2.getText().toString());
+
+        textView = (TextView)findViewById(R.id.text1);
+        textView.setText(reminder+"");
     }
 
 
