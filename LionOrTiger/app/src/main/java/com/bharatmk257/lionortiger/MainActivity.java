@@ -11,7 +11,7 @@ public class MainActivity extends AppCompatActivity {
 
     enum Player {
 
-        ONE, TWO
+        ONE, TWO, No
 
     }
 
@@ -42,6 +42,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        playerChoices[0] = Player.No;
+        playerChoices[1] = Player.No;
+        playerChoices[2] = Player.No;
+        playerChoices[3] = Player.No;
+        playerChoices[4] = Player.No;
+        playerChoices[5] = Player.No;
+        playerChoices[6] = Player.No;
+        playerChoices[7] = Player.No;
+        playerChoices[8] = Player.No;
 
     }
 
@@ -98,7 +108,9 @@ public class MainActivity extends AppCompatActivity {
             if (playerChoices[winnerColumns[0]]
                     == playerChoices[winnerColumns[1]]
                     && playerChoices[winnerColumns[1]]
-                    == playerChoices[winnerColumns[2]]) {
+                    == playerChoices[winnerColumns[2]]
+                    && playerChoices[winnerColumns[0]]
+                    != Player.No) {
                 Toast.makeText(this,"we have winner",Toast.LENGTH_SHORT).show();
             }
 
