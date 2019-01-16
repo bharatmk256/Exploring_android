@@ -2,7 +2,9 @@ package com.bharatmk257.lionortiger;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayout;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -37,12 +39,19 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean gameOver = false;
 
+    private ImageButton btnReset;
+    private GridLayout gridLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        playerChoices[0] = Player.No;
+        for (int i = 0; i < playerChoices.length; i++) {
+            playerChoices[i] = Player.No;
+        }
+
+      /*playerChoices[0] = Player.No;
         playerChoices[1] = Player.No;
         playerChoices[2] = Player.No;
         playerChoices[3] = Player.No;
@@ -50,7 +59,19 @@ public class MainActivity extends AppCompatActivity {
         playerChoices[5] = Player.No;
         playerChoices[6] = Player.No;
         playerChoices[7] = Player.No;
-        playerChoices[8] = Player.No;
+        playerChoices[8] = Player.No;*/
+
+        btnReset = findViewById(R.id.btnReset);
+        gridLayout = findViewById(R.id.gridLayout);
+
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                resetTheGame();
+
+            }
+        });
 
     }
 
@@ -113,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
                         && playerChoices[winnerColumns[0]]
                         != Player.No) {
 
+                    btnReset.setVisibility(View.VISIBLE);
+
                     gameOver = true;
 
                     String winnerOfGame = "";
@@ -131,9 +154,40 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        if (gameOver){
-            
+        if (gameOver) {
+
         }
+
+    }
+
+    // Reset Game Function
+    private void resetTheGame() {
+
+        for (int index = 0; index < gridLayout.getChildCount(); index++) {
+
+            ImageView imageView = (ImageView) gridLayout.getChildAt(index);
+            imageView.setImageDrawable(null);
+            imageView.setAlpha(0.2f);
+
+        }
+
+        currentPlayer = Player.ONE;
+        for (int i = 0; i < playerChoices.length; i++) {
+            playerChoices[i] = Player.No;
+        }
+
+       /*playerChoices[0] = Player.No;
+        playerChoices[1] = Player.No;
+        playerChoices[2] = Player.No;
+        playerChoices[3] = Player.No;
+        playerChoices[4] = Player.No;
+        playerChoices[5] = Player.No;
+        playerChoices[6] = Player.No;
+        playerChoices[7] = Player.No;
+        playerChoices[8] = Player.No;*/
+
+        gameOver = false;
+        btnReset.setVisibility(View.GONE);
 
     }
 
