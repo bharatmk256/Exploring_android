@@ -24,55 +24,61 @@
         app:rowCount="3">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/imgBoxing"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:scaleType="fitCenter"
+            android:tag="boxing"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:srcCompat="@drawable/boxing" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/imgKickBoxing"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:scaleType="fitCenter"
+            android:tag="kickboxing"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:srcCompat="@drawable/kickboxing" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/imgJudo"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:scaleType="fitCenter"
+            android:tag="judo"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:srcCompat="@drawable/judo" />
 
         <ImageButton
-            android:id="@+id/imageButton4"
+            android:id="@+id/imgKarate"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:scaleType="fitCenter"
+            android:tag="karate"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:srcCompat="@drawable/karate" />
 
         <ImageButton
-            android:id="@+id/imageButton5"
+            android:id="@+id/imgAikido"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:scaleType="fitCenter"
+            android:tag="aikido"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:srcCompat="@drawable/aikido" />
 
         <ImageButton
-            android:id="@+id/imageButton6"
+            android:id="@+id/imgTaekwondo"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:scaleType="fitCenter"
+            android:tag="taekwondo"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             app:srcCompat="@drawable/taekwondo" />
