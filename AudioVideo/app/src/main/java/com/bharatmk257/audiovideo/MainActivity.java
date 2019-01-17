@@ -13,7 +13,10 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, MediaPlayer.OnCompletionListener {
 
 
     //UI components
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MediaPlayer mediaPlayer;
     private SeekBar volumeSeekBar;
     private SeekBar moveSeekBar;
+    private Timer timer;
 
     private AudioManager audioManager;
 
@@ -88,6 +92,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         moveSeekBar.setOnSeekBarChangeListener(MainActivity.this);
+        moveSeekBar.setMax(mediaPlayer.getDuration());
+
+        mediaPlayer.setOnCompletionListener(MainActivity.this);
+
 
 
     }
@@ -112,11 +120,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnPlayMusic:
 
                 mediaPlayer.start();
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+
+                        moveSeekBar.setProgress(mediaPlayer.getCurrentPosition());
+
+                    }
+                }, 0,500);
+
 
                 break;
             case R.id.btnPauseMusic:
 
                 mediaPlayer.pause();
+                timer.cancel();
 
                 break;
 
@@ -132,7 +151,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (fromUser) {
 
-                    Toast.makeText(MainActivity.this, Integer.toString(progress), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, Integer.toString(progress), Toast.LENGTH_SHORT).show();
+
+                    mediaPlayer.seekTo(progress);
 
                     break;
 
@@ -144,10 +165,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
 
+        mediaPlayer.pause();
+
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+
+        mediaPlayer.start();
+
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+
+        timer.cancel();
+
+        Toast.makeText(this, "Music done", Toast.LENGTH_SHORT).show();
 
     }
 }
