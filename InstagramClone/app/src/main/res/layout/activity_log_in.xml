@@ -4,86 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUp">
+    tools:context=".LogIn">
+
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:id="@+id/imageView"
+        android:layout_width="222dp"
+        android:layout_height="82dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="156dp"
         android:layout_marginEnd="8dp"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_account"
+        android:src="@drawable/ic_instagram_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/edtUserSign"
+        android:id="@+id/edtUserLog"
         android:layout_width="367dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="46dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="UserName"
+        android:hint="username"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
-        android:id="@+id/edtEmailSign"
+        android:id="@+id/edtPasswordLog"
         android:layout_width="367dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Email address"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtUserSign" />
-
-    <EditText
-        android:id="@+id/edtPasswordSign"
-        android:layout_width="367dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtEmailSign" />
+        app:layout_constraintTop_toBottomOf="@+id/edtUserLog" />
 
     <Button
-        android:id="@+id/btnSignUp"
+        android:id="@+id/btnLogIn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:text="Sign Up"
+        android:text="Log in"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="@+id/edtPasswordSign"
+        app:layout_constraintEnd_toEndOf="@+id/edtPasswordLog"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/edtPasswordSign"
-        app:layout_constraintTop_toBottomOf="@+id/edtPasswordSign" />
-
+        app:layout_constraintStart_toStartOf="@+id/edtPasswordLog"
+        app:layout_constraintTop_toBottomOf="@+id/edtPasswordLog" />
 
     <TextView
-        android:id="@+id/txtSignIn"
+        android:id="@+id/txtSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
-        android:text="Have an account? Sign In."
+        android:text="Don't have an account? Sign Up."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
