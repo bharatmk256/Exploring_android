@@ -1,5 +1,6 @@
 package com.bharatmk257.instagramclone;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
     private String allKickBoxers;   // string just for saving data that we got from server and we can show it
 
+    private Button btnNextActivity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         txtGetData = (TextView) findViewById(R.id.txtGetData);   // find view by id as always :| for textView get data
 
         btnGetAllData = (Button) findViewById(R.id.btnGetAllData);   // uh crap i don't like this find view by id :| for button view get all data
+
+        btnNextActivity = (Button) findViewById(R.id.btnNextActivity);
 
         txtGetData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +77,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             public void onClick(View v) {
                 allKickBoxers = "";  // empty string that we have created on top if you don't remember go and see
                 ParseQuery<ParseObject> queryAll = ParseQuery.getQuery("KickBoxer");  // query parsing query all and main key
+
+//                queryAll.whereGreaterThan("punch_power", 88);  // get all punch power greater then 88
+                queryAll.whereGreaterThanOrEqualTo("punch_power",88);  // get all punch power greater then or equal to  88
+                queryAll.setLimit(1);  // only one result
+
                 queryAll.findInBackground(new FindCallback<ParseObject>() {  // heavy process so find in background
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {  // if done so lest make sure we have got good data soo make some parseException
@@ -97,15 +107,30 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             }
         });
 
+
+        btnNextActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(SignUp.this,SignUpLoginActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+
+
+
     }
 
+
     /*looks like next code is for uploading data to server i mean parse server
-    * i think yes let's see
-    * i am having dout
-    *
-    * yes it's confirmed it's for uploading data i was little bit confused
-    *
-    * let's see what we get */
+     * i think yes let's see
+     * i am having dout
+     *
+     * yes it's confirmed it's for uploading data i was little bit confused
+     *
+     * let's see what we get */
 
 
     @Override
