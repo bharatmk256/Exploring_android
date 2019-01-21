@@ -47,6 +47,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
         if (ParseUser.getCurrentUser() != null) {
             transitionToSocialMediaActivity();
+            finish();
         }
 
         txtSignUp.setOnClickListener(new View.OnClickListener() {
