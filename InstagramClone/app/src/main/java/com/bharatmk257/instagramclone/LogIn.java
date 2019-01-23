@@ -47,7 +47,6 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
         if (ParseUser.getCurrentUser() != null) {
             transitionToSocialMediaActivity();
-            finish();
         }
 
         txtSignUp.setOnClickListener(new View.OnClickListener() {
@@ -108,5 +107,6 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     private void transitionToSocialMediaActivity() {
         Intent intent = new Intent(LogIn.this, SocialMediaActivity.class);
         startActivity(intent);
+        finish();
     }
 }
