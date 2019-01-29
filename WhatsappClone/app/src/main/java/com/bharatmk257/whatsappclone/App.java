@@ -1,4 +1,4 @@
-package com.bharatmk257.twitterclone;
+package com.bharatmk257.whatsappclone;
 
 import android.app.Application;
 
@@ -9,7 +9,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.back4app_app_id))
                 // if defined
