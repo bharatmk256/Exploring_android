@@ -23,17 +23,20 @@ import java.util.List;
 
 public class UsersActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-//    private waUsers;
+    private ArrayList<String> waUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
 
+        setTitle(ParseUser.getCurrentUser().getUsername());
+
 
         final ListView listView = findViewById(R.id.listView);
         listView.setOnItemClickListener(UsersActivity.this);
-        final ArrayList<String> waUsers = new ArrayList<>();
+        waUsers = new ArrayList<>();
+//        final ArrayList<String> waUsers = new ArrayList<>();
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, waUsers);
 
         final SwipeRefreshLayout mySwipeRefreshLayout = findViewById(R.id.swipeContainer);
@@ -130,6 +133,10 @@ public class UsersActivity extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Intent intent = new Intent(UsersActivity.this, ChatActivity.class);
+        intent.putExtra("selectedUser", waUsers.get(position));
+        startActivity(intent);
 
     }
 }
