@@ -15,12 +15,21 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.FindCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DriverRequestListActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,6 +39,9 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
     private LocationManager locationManager;
     private LocationListener locationListener;
 
+    private ListView listView;
+    private ArrayList<String> nearByDriveRequests;
+    private ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +50,13 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
 
         btnGetRequests = (Button) findViewById(R.id.btnGetRequests);
         btnGetRequests.setOnClickListener(DriverRequestListActivity.this);
+
+        listView = findViewById(R.id.requestListView);
+
+        nearByDriveRequests = new ArrayList<>();
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, nearByDriveRequests);
+
+        listView.setAdapter(adapter);
 
     }
 
@@ -122,13 +141,33 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
         }
     }
 
-    private void updateRequestListView(Location location) {
+    private void updateRequestListView(Location driverLocation) {
 
-        LatLng passengerLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        /*mMap.clear();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(passengerLocation, 10));
+        if (driverLocation != null) {
 
-        mMap.addMarker(new MarkerOptions().position(passengerLocation).title("You are here"));*/
+            ParseGeoPoint driverCurrentLocation = new ParseGeoPoint(driverLocation.getLatitude(), driverLocation.getLongitude());
+
+            ParseQuery<ParseObject> requestCarQuery = ParseQuery.getQuery("RequestCar");
+
+            requestCarQuery.whereNear("passengerLocation", driverCurrentLocation);
+            requestCarQuery.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> objects, ParseException e) {
+
+                    if (objects.size() > 0 && e == null) {
+
+                        for (ParseObject nearRequest : objects){
+
+                            Double milesDistanceToPassenger =
+
+                        }
+
+                    }
+
+                }
+            });
+
+        }
 
     }
 
