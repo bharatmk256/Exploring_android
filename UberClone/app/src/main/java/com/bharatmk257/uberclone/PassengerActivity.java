@@ -1,6 +1,7 @@
 package com.bharatmk257.uberclone;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -21,8 +22,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
-import com.parse.Parse;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -31,6 +33,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.List;
+
 
 public class PassengerActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
 
@@ -58,20 +61,40 @@ public class PassengerActivity extends FragmentActivity implements OnMapReadyCal
 
         ParseQuery<ParseObject> carRequestQuery = ParseQuery.getQuery("RequestCar");
 
-        carRequestQuery.whereEqualTo("username",ParseUser.getCurrentUser().getUsername());
+        carRequestQuery.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
         carRequestQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
 
-                if (objects.size() > 0 && e == null){
+                if (objects.size() > 0 && e == null) {
 
-                    
+                    isUberCancelld = false;
+                    btnRequestCar.setText("Cancel cab");
 
                 }
-
             }
         });
 
+        findViewById(R.id.btnLogOutFromPassengerActivity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ParseUser.logOutInBackground(new LogOutCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null && ParseUser.getCurrentUser() == null) {
+
+                            Toast.makeText(PassengerActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(PassengerActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        }
+                    }
+                });
+
+            }
+        });
 
     }
 
@@ -118,11 +141,6 @@ public class PassengerActivity extends FragmentActivity implements OnMapReadyCal
             }
         };
 
-//        if (Build.VERSION.SDK_INT < 23) {
-//
-//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-//
-//        } else
         if (Build.VERSION.SDK_INT >= 23) {
 
             if (ContextCompat.checkSelfPermission(PassengerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -172,39 +190,72 @@ public class PassengerActivity extends FragmentActivity implements OnMapReadyCal
     @Override
     public void onClick(View v) {
 
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-            Location passengerCurrentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-            if (passengerCurrentLocation != null) {
+        if (isUberCancelld) {
 
 
-                ParseObject requestCar = new ParseObject("RequestCar");
-                requestCar.put("username", ParseUser.getCurrentUser().getUsername());
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-                ParseGeoPoint userLocation = new ParseGeoPoint(passengerCurrentLocation.getLatitude(), passengerCurrentLocation.getLongitude());
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-                requestCar.put("passengerLocation", userLocation);
+                Location passengerCurrentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-                requestCar.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null){
+                if (passengerCurrentLocation != null) {
 
-                            Toast.makeText(PassengerActivity.this, "A car request is sent", Toast.LENGTH_SHORT).show();
-                            btnRequestCar.setText("Cancel cab");
-                            
+
+                    ParseObject requestCar = new ParseObject("RequestCar");
+                    requestCar.put("username", ParseUser.getCurrentUser().getUsername());
+
+                    ParseGeoPoint userLocation = new ParseGeoPoint(passengerCurrentLocation.getLatitude(), passengerCurrentLocation.getLongitude());
+
+                    requestCar.put("passengerLocation", userLocation);
+
+                    requestCar.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+
+                                Toast.makeText(PassengerActivity.this, "A car request is sent", Toast.LENGTH_SHORT).show();
+                                btnRequestCar.setText("Cancel cab");
+                                isUberCancelld = false;
+
+                            }
                         }
-                    }
-                });
+                    });
 
 
-            } else {
-                Toast.makeText(PassengerActivity.this, "Unknown error", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(PassengerActivity.this, "Unknown error", Toast.LENGTH_SHORT).show();
+                }
+
             }
+        } else {
+
+            ParseQuery<ParseObject> caRequestQuery = ParseQuery.getQuery("RequestCar");
+            caRequestQuery.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+            caRequestQuery.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> requestList, ParseException e) {
+                    if (requestList.size() > 0 && e == null) {
+
+                        isUberCancelld = true;
+                        btnRequestCar.setText("Request car");
+
+                        for (ParseObject uberRequest : requestList) {
+                            uberRequest.deleteInBackground(new DeleteCallback() {
+                                @Override
+                                public void done(ParseException e) {
+
+                                    if (e == null) {
+                                        Toast.makeText(PassengerActivity.this, "Request deleted", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
+                        }
+
+                    }
+                }
+            });
 
         }
     }

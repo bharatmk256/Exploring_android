@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 @Override
                                 public void done(ParseException e) {
                                     transitionToPassengerActivity();
+                                    transitionToDriverRequestListActivity();
                                 }
                             });
                         }
@@ -51,9 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (edtDOrP.getText().toString().equals("")) {
             Toast.makeText(MainActivity.this, "Are you driver or passenger?", Toast.LENGTH_SHORT).show();
         }
-
     }
-
 
     enum State {
         SIGNUP, LOGIN
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText edtUserName, edtPassword, edtDOrP;
     private Button btnSignUpLogin, btnOneTimeLogin;
     private RadioButton rDBPassenger, rDBDriver;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (ParseUser.getCurrentUser() != null) {
             transitionToPassengerActivity();
+            transitionToDriverRequestListActivity();
         }
         state = State.SIGNUP;
 
@@ -96,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(MainActivity.this, "Are you driver or a passenger?", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
                     ParseUser appUser = new ParseUser();
                     appUser.setUsername(edtUserName.getText().toString());
                     appUser.setPassword(edtPassword.getText().toString());
@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             if (e == null) {
                                 Toast.makeText(MainActivity.this, "Signed up", Toast.LENGTH_SHORT).show();
                                 transitionToPassengerActivity();
+                                transitionToDriverRequestListActivity();
                             } else {
                                 Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             if (user != null && e == null) {
                                 Toast.makeText(MainActivity.this, "user is logged in", Toast.LENGTH_SHORT).show();
                                 transitionToPassengerActivity();
+                                transitionToDriverRequestListActivity();
                             } else {
                                 Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -165,8 +167,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (ParseUser.getCurrentUser().get("as").equals("Passenger")) {
                 Intent intent = new Intent(MainActivity.this, PassengerActivity.class);
                 startActivity(intent);
+                finish();
+            }
+        }
+    }
+
+    private void transitionToDriverRequestListActivity() {
+
+        if (ParseUser.getCurrentUser() != null) {
+            if (ParseUser.getCurrentUser().get("as").equals("Driver")) {
+                Intent intent = new Intent(MainActivity.this, DriverRequestListActivity.class);
+                startActivity(intent);
+                finish();
             }
         }
 
     }
+
 }
