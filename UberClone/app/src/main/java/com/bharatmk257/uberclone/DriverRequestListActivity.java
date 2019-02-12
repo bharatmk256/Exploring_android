@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
@@ -58,6 +59,10 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
 
         listView.setAdapter(adapter);
 
+        nearByDriveRequests.clear();
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
     }
 
 
@@ -93,8 +98,6 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
 
     @Override
     public void onClick(View view) {
-
-        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
         locationListener = new LocationListener() {
             @Override
@@ -144,8 +147,9 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
     private void updateRequestListView(Location driverLocation) {
 
         if (driverLocation != null) {
+            nearByDriveRequests.clear();
 
-            ParseGeoPoint driverCurrentLocation = new ParseGeoPoint(driverLocation.getLatitude(), driverLocation.getLongitude());
+            final ParseGeoPoint driverCurrentLocation = new ParseGeoPoint(driverLocation.getLatitude(), driverLocation.getLongitude());
 
             ParseQuery<ParseObject> requestCarQuery = ParseQuery.getQuery("RequestCar");
 
@@ -154,16 +158,26 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
                 @Override
                 public void done(List<ParseObject> objects, ParseException e) {
 
-                    if (objects.size() > 0 && e == null) {
+                    if (e == null) {
 
-                        for (ParseObject nearRequest : objects){
+                        if (objects.size() > 0) {
 
-                            Double milesDistanceToPassenger =
+                            for (ParseObject nearRequest : objects) {
 
+                                Double milesDistanceToPassenger = driverCurrentLocation.distanceInMilesTo((ParseGeoPoint) nearRequest.get("passengerLocation"));
+
+                                float roundedDistanceValue = Math.round(milesDistanceToPassenger * 10) / 10;
+                                nearByDriveRequests.add("There are " + roundedDistanceValue + " miles to " + nearRequest.get("username"));
+
+                            }
+
+
+                        } else {
+                            Toast.makeText(DriverRequestListActivity.this, "Sorry there are no requests yet", Toast.LENGTH_SHORT).show();
                         }
+                        adapter.notifyDataSetChanged();
 
                     }
-
                 }
             });
 
