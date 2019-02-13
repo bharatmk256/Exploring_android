@@ -63,6 +63,17 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            try {
+
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 
@@ -162,6 +173,10 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
 
                         if (objects.size() > 0) {
 
+                            if (nearByDriveRequests.size() > 0) {
+                                nearByDriveRequests.clear();
+                            }
+
                             for (ParseObject nearRequest : objects) {
 
                                 Double milesDistanceToPassenger = driverCurrentLocation.distanceInMilesTo((ParseGeoPoint) nearRequest.get("passengerLocation"));
@@ -195,8 +210,8 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
 
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-                Location currentPassengerLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                updateRequestListView(currentPassengerLocation);
+//                Location currentPassengerLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//                updateRequestListView(currentPassengerLocation);
 
             }
         }
