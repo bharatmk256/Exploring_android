@@ -262,12 +262,9 @@ public class DriverRequestListActivity extends AppCompatActivity implements View
             @Override
             public void onLocationChanged(Location location) {
 
-//                if (Build.VERSION.SDK_INT < 23 || ContextCompat.checkSelfPermission(DriverRequestListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            }
 
-//            }
+            }
 
 
             @Override
