@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,13 +39,23 @@ public class MainActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUp();
+
+                if (edtEmail.getText().toString().equals("") && edtPassword.getText().toString().equals("")  && edtUsername.getText().toString().equals("")) {
+                    Toast.makeText(MainActivity.this, "Please fill the details", Toast.LENGTH_SHORT).show();
+                } else {
+                    signUp();
+                }
             }
         });
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+
+                if (edtEmail.getText().toString().equals("") && edtPassword.getText().toString().equals("")  && edtUsername.getText().toString().equals("")) {
+                    Toast.makeText(MainActivity.this, "Please fill the details", Toast.LENGTH_SHORT).show();
+                } else {
+                    signIn();
+                }
             }
         });
 
@@ -73,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
 
                     Toast.makeText(MainActivity.this, "SignUp Success", Toast.LENGTH_LONG).show();
+
+                    FirebaseDatabase.getInstance().getReference().child("my_users")
+                            .child(task.getResult().getUser().getUid())
+                            .child("username").setValue(edtUsername.getText().toString());
+
                     transitionToSocialMediaActivity();
 
                 } else {
