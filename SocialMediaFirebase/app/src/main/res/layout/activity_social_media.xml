@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
+        android:hint="Please enter description for image"
         android:visibility="gone" />
 
     <ListView
