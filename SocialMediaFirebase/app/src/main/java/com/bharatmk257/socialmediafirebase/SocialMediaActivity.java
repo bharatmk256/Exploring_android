@@ -16,23 +16,33 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.jar.Attributes;
 
-public class SocialMediaActivity extends AppCompatActivity {
+public class SocialMediaActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private FirebaseAuth mAuth;
     private ImageView postImageView;
@@ -42,6 +52,12 @@ public class SocialMediaActivity extends AppCompatActivity {
     private Bitmap bitmap;
 
     private String imageIdentifier;
+
+    private ArrayList<String> usernames;
+    private ArrayAdapter adapter;
+
+    private ArrayList<String> uids;
+    private String imageDownloadLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +70,13 @@ public class SocialMediaActivity extends AppCompatActivity {
         btnCreatePost = (Button) findViewById(R.id.btnCreatePost);
         edtDes = (EditText) findViewById(R.id.edtDes);
         usersListView = (ListView) findViewById(R.id.usersListView);
+        usersListView.setOnItemClickListener(SocialMediaActivity.this);
+        usernames = new ArrayList<>();
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, usernames);
+
+        uids = new ArrayList<>();
+
+        usersListView.setAdapter(adapter);
 
 
         postImageView.setOnClickListener(new View.OnClickListener() {
@@ -168,9 +191,75 @@ public class SocialMediaActivity extends AppCompatActivity {
                     Toast.makeText(SocialMediaActivity.this, "Success", Toast.LENGTH_SHORT).show();
 
                     edtDes.setVisibility(View.VISIBLE);
+
+
+                    FirebaseDatabase.getInstance().getReference().child("my_users").addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            uids.add(dataSnapshot.getKey());
+
+                            String username = (String) dataSnapshot.child("username").getValue();
+                            usernames.add(username);
+                            adapter.notifyDataSetChanged();
+
+
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+
+                            if (task.isSuccessful()) {
+
+                                imageDownloadLink = task.getResult().toString();
+
+                            }
+                        }
+                    });
                 }
             });
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        HashMap<String, String> dataMap = new HashMap<>();
+        dataMap.put("fromWhom", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        dataMap.put("imageIdentifier", imageIdentifier);
+        dataMap.put("imageLink", imageDownloadLink);
+        dataMap.put("des", edtDes.getText().toString());
+
+        FirebaseDatabase.getInstance().getReference().child("my_users").child(uids.get(position)).child("received_posts").push().setValue(dataMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(SocialMediaActivity.this, "finish", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
 }
